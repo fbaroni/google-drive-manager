@@ -2,7 +2,6 @@
 
 namespace App\PathGenerator;
 
-
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class UploadFilesPathGenerator implements PathGeneratorInterface
@@ -24,9 +23,9 @@ class UploadFilesPathGenerator implements PathGeneratorInterface
         return $this->kernel->getProjectDir() . '/files/';
     }
 
-    public function getAbsolutePathFile($fileName  = null): string
+    public function getAbsolutePathFile($fileName = null): string
     {
-        if(!$fileName){
+        if (!$fileName) {
             throw new \RuntimeException('Filename should not be null');
         }
 

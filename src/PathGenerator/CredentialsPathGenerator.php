@@ -2,7 +2,6 @@
 
 namespace App\PathGenerator;
 
-
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class CredentialsPathGenerator implements PathGeneratorInterface
