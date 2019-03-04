@@ -45,7 +45,7 @@ class UploadFileCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->writeln($this->getAbsolutePathFile($input->getArgument('filename')));
-        $io->writeln($this->getGoogleDriveClient());
+        dump($this->getGoogleDriveClient());
 //        $arg1 = $input->getArgument('arg1');
 //
 //        if ($arg1) {
@@ -64,7 +64,7 @@ class UploadFileCommand extends Command
         return $this->uploaderPathGetter->getAbsolutePathFile($fileName);
     }
 
-    private function getGoogleDriveClient($fileName): \Google_Client
+    private function getGoogleDriveClient(): \Google_Client
     {
         return $this->googleDriveManager->getClient();
     }

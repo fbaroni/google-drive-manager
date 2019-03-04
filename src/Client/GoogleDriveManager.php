@@ -23,7 +23,7 @@ class GoogleDriveManager implements GoogleDriveManagerInterface
             $client = new \Google_Client();
             $client->setApplicationName('Google Drive API PHP Quickstart');
             $client->setScopes(\Google_Service_Drive::DRIVE_METADATA_READONLY);
-            $client->setAuthConfig($this->credentialsPathGenerator->getAbsolutePathFile());
+            $client->setAuthConfig($this->credentialsPathGenerator->getAbsolutePathCredentilsFile());
             $client->setAccessType('offline');
             $client->setPrompt('select_account consent');
 
@@ -31,7 +31,7 @@ class GoogleDriveManager implements GoogleDriveManagerInterface
             // The file token.json stores the user's access and refresh tokens, and is
             // created automatically when the authorization flow completes for the first
             // time.
-            $tokenPath = 'token.json';
+            $tokenPath = $this->credentialsPathGenerator->getAbsolutePathTokenFile();
 
             if (file_exists($tokenPath)) {
                 $accessToken = json_decode(file_get_contents($tokenPath), true);
