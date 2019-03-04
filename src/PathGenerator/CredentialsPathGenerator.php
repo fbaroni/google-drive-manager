@@ -37,7 +37,7 @@ class CredentialsPathGenerator implements PathGeneratorInterface
 
     public function getAbsolutePathTokenFile(): string
     {
-        $fileName = getenv('GOOGLE_CREDENTIALS_FILE');
+        $fileName = getenv('GOOGLE_TOKEN_FILE');
 
         return $this->getAbsolutePathFile($fileName);
     }

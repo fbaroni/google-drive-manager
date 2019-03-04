@@ -5,4 +5,5 @@ interface GoogleDriveManagerInterface
 {
     public function getClient(): \Google_Client;
     public function getServiceDrive(): \Google_Service_Drive;
+    public function listFirstFiles(): string;
 }

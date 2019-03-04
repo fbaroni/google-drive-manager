@@ -44,19 +44,7 @@ class UploadFileCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->writeln($this->getAbsolutePathFile($input->getArgument('filename')));
-        dump($this->getGoogleDriveClient());
-//        $arg1 = $input->getArgument('arg1');
-//
-//        if ($arg1) {
-//            $io->note(sprintf('You passed an argument: %s', $arg1));
-//        }
-//
-//        if ($input->getOption('option1')) {
-//            // ...
-//        }
-//
-//        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->write($this->googleDriveManager->listFirstFiles());
     }
 
     private function getAbsolutePathFile($fileName): string
