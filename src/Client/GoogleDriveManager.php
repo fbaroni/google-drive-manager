@@ -3,18 +3,23 @@
 namespace App\Client;
 
 use App\PathGenerator\CredentialsPathGenerator;
+use App\PathGenerator\UploadFilesPathGenerator;
+use Symfony\Component\HttpFoundation\File\File;
+use Carbon\Carbon;
 
-class GoogleDriveManager implements GoogleDriveManagerInterface
+class GoogleDriveManager implements GoogleDriveManagerInterface, FileManagerInterface
 {
     private $credentialsPathGenerator;
+    private $uploadFilesPathGenerator;
     private $client;
     private $service;
 
-    public function __construct(CredentialsPathGenerator $credentialsPathGenerator)
+    public function __construct(CredentialsPathGenerator $credentialsPathGenerator, UploadFilesPathGenerator $uploadFilesPathGenerator)
     {
         $this->credentialsPathGenerator = $credentialsPathGenerator;
         $this->client = $this->getClient();
         $this->service = $this->getServiceDrive();
+        $this->uploadFilesPathGenerator = $uploadFilesPathGenerator;
     }
 
     public function getClient(): \Google_Client
@@ -112,4 +117,38 @@ class GoogleDriveManager implements GoogleDriveManagerInterface
 
         return $client;
     }
+
+    public function upload($fileName): string
+    {
+        $fileNameToUpload = $this->getFileNameWithDate($fileName);
+
+        $fileMetadata = new \Google_Service_Drive_DriveFile([
+            'name' => $fileNameToUpload,
+            'parents' => [getenv('GOOGLE_DRIVE_FOLDER_ID')]]);
+
+        $content = file_get_contents($this->uploadFilesPathGenerator->getAbsolutePathFile($fileName));
+
+        $file = new File($this->uploadFilesPathGenerator->getAbsolutePathFile($fileName));
+
+        $googleDrivefile = $this->service->files->create($fileMetadata, [
+            'data' => $content,
+            'mimeType' => $file->getMimeType(),
+            'uploadType' => 'multipart',
+            'fields' => 'id']);
+
+        return $googleDrivefile->id;
+    }
+
+    /**
+     * @param $fileName
+     * @return string
+     */
+    public function getFileNameWithDate($fileName): string
+    {
+        $fileNameArray = explode('.', $fileName);
+
+        return $fileNameArray[0] . Carbon::now()->format('YmdHis') . '.' . $fileNameArray[1];
+    }
+
+
 }

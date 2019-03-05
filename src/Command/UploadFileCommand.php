@@ -44,16 +44,12 @@ class UploadFileCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->write($this->googleDriveManager->listFirstFiles());
-    }
-
-    private function getAbsolutePathFile($fileName): string
-    {
-        return $this->uploaderPathGetter->getAbsolutePathFile($fileName);
-    }
-
-    private function getGoogleDriveClient(): \Google_Client
-    {
-        return $this->googleDriveManager->getClient();
+        try {
+            $io->writeln('Succesfully uploaded file with id: ' .
+                $this->googleDriveManager->upload($input->getArgument('filename')));
+        }
+        catch(\Exception $exception){
+            $io->writeln('Uploading the file we found the problem:' . $exception->getMessage());
+        }
     }
 }
